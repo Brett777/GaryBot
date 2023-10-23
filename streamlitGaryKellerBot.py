@@ -5,7 +5,7 @@ import requests
 import openai
 openai.api_key = os.getenv("OPENAI_KEY")
 
-
+deployment = drx.Deployment(deployment_id="6536a50ceb43cd6efc47ca23")
 
 #Configure the page title, favicon, layout, etc
 st.set_page_config(page_title="Ask Gary")
@@ -128,11 +128,24 @@ def mainPage():
             st.markdown(message["content"])
     # Accept user input
     if prompt := st.chat_input("What is up?"):
+        # Add user message to chat history
+        st.session_state.messages.append({"role": "user", "content": prompt})
         # Display user message in chat message container
         with st.chat_message("user"):
             st.markdown(prompt)
-        # Add user message to chat history
-        st.session_state.messages.append({"role": "user", "content": prompt})
+        # Display assistant response in chat message container
+        with st.chat_message("assistant"):
+            message_placeholder = st.empty()
+            full_response = ""
+
+    full_response += deployment.predict_unstructured(
+        {
+            "question": prompt,
+            "openai_api_key": os.environ["OPENAI_API_KEY"],
+        }
+    )
+    message_placeholder.markdown(full_response + "▌")
+    st.session_state.messages.append({"role": "assistant", "content": full_response})
 
 #Main app
 def _main():
