@@ -114,10 +114,25 @@ def mainPage():
     col1, col2, col3 = container1.columns([1,3,1])
     container2 = st.container()
     col4, col5, col6, col7 = container2.columns([1.7,1,1,1])
+
+    # Initialize chat history
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
+
     with col2:
         st.image("Keller-3.jpg")
 
-
+    # Display chat messages from history on app rerun
+    for message in st.session_state.messages:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+    # Accept user input
+    if prompt := st.chat_input("What is up?"):
+        # Display user message in chat message container
+        with st.chat_message("user"):
+            st.markdown(prompt)
+        # Add user message to chat history
+        st.session_state.messages.append({"role": "user", "content": prompt})
 
 #Main app
 def _main():
