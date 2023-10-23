@@ -3,3 +3,8 @@ requests
 pillow
 openai
 datarobotx
+faiss-cpu
+langchain
+pypdf
+unstructured[all-docs]
+tiktoken
