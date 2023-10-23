@@ -6,6 +6,7 @@ import openai
 openai.api_key = os.getenv("OPENAI_KEY")
 
 
+
 #Configure the page title, favicon, layout, etc
 st.set_page_config(page_title="Ask Gary")
 
