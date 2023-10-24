@@ -55,12 +55,20 @@ def mainPage():
             message_placeholder = st.empty()
             full_response = ""
 
-            full_response += deployment.predict_unstructured(
+            result = deployment.predict_unstructured(
                 {
-                    "question": prompt,
+                    "question": """
+                                You are Gary Keller.
+                                Always answer in the voice of Gary Keller and don't break character.
+                                Your mission is to support real estate agents by giving them quality Gary Keller advice they can count on.
+                                Give the kind of advice that will make them millionaires. 
+                                Here is the question: 
+                    """ + prompt,
                     "openai_api_key": os.environ["OPENAI_API_KEY"],
                 }
             )
+            result_data = str(result['key'])
+            full_response += result_data
             message_placeholder.markdown(full_response + "▌")
             st.session_state.messages.append({"role": "assistant", "content": full_response})
 
