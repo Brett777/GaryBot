@@ -10,7 +10,6 @@ deployment = drx.Deployment(deployment_id="6537cdc70bfca349f2b368f5")
 #Configure the page title, favicon, layout, etc
 st.set_page_config(page_title="Ask Gary")
 
-
 def mainPage():
     container1 = st.container()
     col1, col2, col3 = container1.columns([1,3,1])
