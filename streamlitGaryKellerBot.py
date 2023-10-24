@@ -10,21 +10,6 @@ deployment = drx.Deployment(deployment_id="6537cdc70bfca349f2b368f5")
 #Configure the page title, favicon, layout, etc
 st.set_page_config(page_title="Ask Gary")
 
-# def createVectorStore():
-#     from langchain.document_loaders import DirectoryLoader
-#     from langchain.text_splitter import MarkdownTextSplitter
-#     from langchain.embeddings.openai import OpenAIEmbeddings
-#     from langchain.text_splitter import CharacterTextSplitter
-#     from langchain.vectorstores import FAISS
-#     Load the document, split it into chunks, embed each chunk and load it into the vector store.
-    # loader = DirectoryLoader(r'Books', glob="**/*.pdf",show_progress=True)
-    # data = loader.load()
-    # splitter = MarkdownTextSplitter(
-    #     chunk_size=2000,
-    #     chunk_overlap=1000,
-    # )
-    # documents = splitter.split_documents(data)
-    # db = FAISS.from_documents(documents, OpenAIEmbeddings())
 
 def mainPage():
     container1 = st.container()
@@ -53,9 +38,9 @@ def mainPage():
         # Display assistant response in chat message container
         with st.chat_message("assistant"):
             message_placeholder = st.empty()
-            full_response = ""
+            full_response = {}
 
-            result = deployment.predict_unstructured(
+        for response in deployment.predict_unstructured(
                 {
                     "question": """
                                 You are Gary Keller.
@@ -66,11 +51,11 @@ def mainPage():
                     """ + prompt,
                     "openai_api_key": os.environ["OPENAI_API_KEY"],
                 }
-            )
-            result_data = str(result['key'])
-            full_response += result_data
-            message_placeholder.markdown(full_response + "▌")
-            st.session_state.messages.append({"role": "assistant", "content": full_response})
+            ):
+                full_response += response.choices[0].delta.get("answer", "")
+                message_placeholder.markdown(full_response + "▌")
+            message_placeholder.markdown(full_response)
+        st.session_state.messages.append({"role": "assistant", "content": full_response})
 
 #Main app
 def _main():
