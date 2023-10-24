@@ -55,14 +55,14 @@ def mainPage():
             message_placeholder = st.empty()
             full_response = ""
 
-    full_response += deployment.predict_unstructured(
-        {
-            "question": prompt,
-            "openai_api_key": os.environ["OPENAI_API_KEY"],
-        }
-    )
-    message_placeholder.markdown(full_response + "▌")
-    st.session_state.messages.append({"role": "assistant", "content": full_response})
+            full_response += deployment.predict_unstructured(
+                {
+                    "question": prompt,
+                    "openai_api_key": os.environ["OPENAI_API_KEY"],
+                }
+            )
+            message_placeholder.markdown(full_response + "▌")
+            st.session_state.messages.append({"role": "assistant", "content": full_response})
 
 #Main app
 def _main():
