@@ -38,7 +38,7 @@ def mainPage():
         # Display assistant response in chat message container
         with st.chat_message("assistant"):
             message_placeholder = st.empty()
-            full_response = {}
+            full_response = ""
 
         for response in deployment.predict_unstructured(
                 {
