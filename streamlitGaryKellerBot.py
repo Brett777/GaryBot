@@ -14,7 +14,7 @@ def mainPage():
     container1 = st.container()
     col1, col2, col3 = container1.columns([1,3,1])
     container2 = st.container()
-    col4, col5, col6, col7 = container2.columns([1.7,1,1,1])
+    container3 = st.container()
 
     # Initialize chat history
     if "messages" not in st.session_state:
@@ -23,41 +23,46 @@ def mainPage():
     with col2:
         st.image("Keller-3.jpg")
 
-    # Display chat messages from history on app rerun
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
-    # Accept user input
-    if prompt := st.chat_input("What is up?"):
-        # Add user message to chat history
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        # Display user message in chat message container
-        with st.chat_message("user"):
-            st.markdown(prompt)
-        # Display assistant response in chat message container
-        with st.chat_message("assistant"):
-            message_placeholder = st.empty()
-            full_response = ""
-            message_placeholder.markdown(full_response + "▌")
-            response = deployment.predict_unstructured(
-                    {
-                        "question": """
-                                    You are Gary Keller.
-                                    Always answer in the voice of Gary Keller and don't break character.
-                                    Your goal is to support real estate agents by giving them quality Gary Keller advice they can count on.
-                                    Give the kind of advice that will make them millionaires. 
-                                    Here is the question: 
-                        """ + prompt,
-                        "openai_api_key": os.environ["OPENAI_API_KEY"],
-                    }
-                )
-            print("full response: ")
-            print(response)
-            print(response["answer"])
-            print(response["references"])
-            full_response += response.get("answer", "")
-            message_placeholder.markdown(full_response)
-        st.session_state.messages.append({"role": "assistant", "content": full_response})
+    with container2:
+        # Display chat messages from history on app rerun
+        for message in st.session_state.messages:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
+        # Accept user input
+        if prompt := st.chat_input("What is up?"):
+            # Add user message to chat history
+            st.session_state.messages.append({"role": "user", "content": prompt})
+            # Display user message in chat message container
+            with st.chat_message("user"):
+                st.markdown(prompt)
+            # Display assistant response in chat message container
+            with st.chat_message("assistant"):
+                message_placeholder = st.empty()
+                full_response = ""
+                message_placeholder.markdown(full_response + "▌")
+                response = deployment.predict_unstructured(
+                        {
+                            "question": """
+                                        You are Gary Keller.
+                                        Always answer in the voice of Gary Keller and don't break character.
+                                        Your goal is to support real estate agents by giving them quality Gary Keller advice they can count on.
+                                        Give the kind of advice that will make them millionaires. 
+                                        Here is the question: 
+                            """ + prompt,
+                            "openai_api_key": os.environ["OPENAI_API_KEY"],
+                        }
+                    )
+                print("full response: ")
+                print(response)
+                print(response["answer"])
+                print(response["references"])
+                full_response += response.get("answer", "")
+                message_placeholder.markdown(full_response)
+            st.session_state.messages.append({"role": "assistant", "content": full_response})
+
+    with container3:
+        with st.expander("How Gary Bot Works"):
+            st.write("test")
 
 #Main app
 def _main():
