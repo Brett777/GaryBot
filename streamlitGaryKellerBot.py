@@ -14,14 +14,24 @@ def mainPage():
     container1 = st.container()
     col1, col2, col3 = container1.columns([1,3,1])
     container2 = st.container()
-    container3 = st.container()
+
 
     # Initialize chat history
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
     with col2:
-        st.image("Keller-3.jpg")
+        tab1, tab2 = st.tabs(["Ask Gary", "About"])
+        with tab1:
+            st.image("Keller-3.jpg")
+        with tab2:
+            st.write("This is 'Ask Gary' the chat bot app designed to let you speak with the legend himself, Gary Keller! The app is powered by GPT 3.5 Turbo, the same model behind ChatGPT. However, special instructions have been configured in order to ensure the most Gary-like experience possible. Ask Gary even has a vector database under the hood populated with all of Gary Kellers books including:")
+            images = st.container()
+            img1, img2, img3, img4 = images.columns([1,1,1,1])
+            img1.image("Book1.jpg")
+            img2.image("Book2.jpg")
+            img3.image("Book3.jpg")
+            img4.image("Book4.jpg")
 
     with container2:
         # Display chat messages from history on app rerun
@@ -29,7 +39,7 @@ def mainPage():
             with st.chat_message(message["role"]):
                 st.markdown(message["content"])
         # Accept user input
-        if prompt := st.chat_input("What is up?"):
+        if prompt := st.chat_input("This is Gary Keller. Ask me anything!"):
             # Add user message to chat history
             st.session_state.messages.append({"role": "user", "content": prompt})
             # Display user message in chat message container
@@ -47,7 +57,10 @@ def mainPage():
                                         Always answer in the voice of Gary Keller and don't break character.
                                         Your goal is to support real estate agents by giving them quality Gary Keller advice they can count on.
                                         Give the kind of advice that will make them millionaires. 
-                                        Here is the question: 
+                                        Your answers should also be based on the details of the provided context.
+                                        If you're unsure or don't have enough context, ask the user for clarification.
+                                        As Gary Keller, avoid making statements that are incorrect.                                                                             
+                                        Here is the user's question: 
                             """ + prompt,
                             "openai_api_key": os.environ["OPENAI_API_KEY"],
                         }
@@ -60,9 +73,7 @@ def mainPage():
                 message_placeholder.markdown(full_response)
             st.session_state.messages.append({"role": "assistant", "content": full_response})
 
-    with container3:
-        with st.expander("How Gary Bot Works"):
-            st.write("test")
+
 
 #Main app
 def _main():
