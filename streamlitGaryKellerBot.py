@@ -5,7 +5,7 @@ import streamlit as st
 import requests
 import openai
 #prompt = "What is wholesale investing?"
-deployment = drx.Deployment(deployment_id="6537cdc70bfca349f2b368f5")
+deployment = drx.Deployment(deployment_id="65396c9f675603e44247cbb4")
 
 #Configure the page title, favicon, layout, etc
 st.set_page_config(page_title="Ask Gary")
